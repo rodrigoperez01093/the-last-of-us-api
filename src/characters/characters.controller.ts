@@ -7,13 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { CharacterService } from './characters.service';
+import { CharactersService } from './characters.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
 
 @Controller('character')
 export class CharacterController {
-  constructor(private readonly charactersService: CharacterService) {}
+  constructor(private readonly charactersService: CharactersService) {}
 
   @Post()
   create(@Body() createCharacterDto: CreateCharacterDto) {

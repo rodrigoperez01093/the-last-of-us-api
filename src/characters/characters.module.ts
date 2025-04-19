@@ -1,6 +1,6 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Character, CharacterSchema } from './schemas/character.schema';
-import { CharacterService } from './characters.service';
+import { CharactersService } from './characters.service';
 import { CharacterController } from './characters.controller';
 import { Module } from '@nestjs/common';
 
@@ -11,6 +11,6 @@ import { Module } from '@nestjs/common';
     ]),
   ],
   controllers: [CharacterController],
-  providers: [CharacterService],
+  providers: [CharactersService],
 })
 export class CharacterModule {}
