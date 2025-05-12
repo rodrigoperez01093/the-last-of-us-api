@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('locations')
 export class LocationsController {
@@ -21,8 +22,8 @@ export class LocationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.locationsService.findOne(+id);
+  findOne(@Param('id') id: ObjectId) {
+    return this.locationsService.findOne(id);
   }
 
   @Delete(':id')

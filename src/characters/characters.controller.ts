@@ -1,23 +1,18 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CharactersService } from './characters.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
-import { UpdateCharacterDto } from './dto/update-character.dto';
 
 @Controller('character')
 export class CharacterController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Post()
-  create(@Body() createCharacterDto: CreateCharacterDto) {
-    return this.charactersService.create(createCharacterDto);
+  createOrUpdate(@Body() body: CreateCharacterDto & { _id?: string }) {
+    if (body._id) {
+      const { _id, ...rest } = body;
+      return this.charactersService.update(_id, rest);
+    }
+    return this.charactersService.create(body);
   }
 
   @Get()
@@ -28,14 +23,6 @@ export class CharacterController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.charactersService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateCharacterDto: UpdateCharacterDto,
-  ) {
-    return this.charactersService.update(id, updateCharacterDto);
   }
 
   @Delete(':id')

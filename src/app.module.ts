@@ -5,6 +5,7 @@ import { CharacterModule } from './characters/characters.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ActorModule } from './actor/actor.module';
 import { LocationsModule } from './locations/locations.module';
+import { WeaponsModule } from './weapons/weapons.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LocationsModule } from './locations/locations.module';
     CharacterModule,
     ActorModule,
     LocationsModule,
+    WeaponsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

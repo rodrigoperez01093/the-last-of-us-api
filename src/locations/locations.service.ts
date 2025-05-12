@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Location, LocationDocument } from './schemas/location.schema';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
@@ -37,11 +37,11 @@ export class LocationsService {
   }
 
   findAll() {
-    return `This action returns all locations`;
+    return this.locationModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} location`;
+  findOne(id: ObjectId) {
+    return this.locationModel.findById(id);
   }
 
   remove(id: number) {
