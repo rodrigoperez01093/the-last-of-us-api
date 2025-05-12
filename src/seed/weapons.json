@@ -1,0 +1,121 @@
+[
+  {
+    "_id": "Ellie",
+    "type": "Pistol",
+    "model": "PT92AFS",
+    "caliber": "9x19mm",
+    "weight": "2.13 lbs (0.96 kg)",
+    "manufacturer": "Taurus",
+    "capacity": ["6 (basic)", "10 (upgraded)"]
+  },
+  {
+    "_id": "Abby",
+    "type": "Semi-automatic pistol",
+    "model": "hybrid of a Glock 17, a Steyr M-series pistol, and a Caracal F",
+    "caliber": "9x19mm",
+    "weight": "Unknown",
+    "manufacturer": "Unknown",
+    "capacity": ["6 (basic)", "10 (upgraded)"]
+  },
+  {
+    "_id": "Dina, Jessie",
+    "type": "Pistol",
+    "model": "Classic Commercial Browning Hi-Power",
+    "caliber": "9x19mm",
+    "weight": "2.19 lb (1.0 kg)",
+    "manufacturer": "Browning",
+    "capacity": ["13"]
+  },
+  {
+    "_id": "Manny",
+    "type": "Pistol",
+    "model": "M1911A1",
+    "caliber": "45",
+    "weight": "2.49 lb (1.13 kg)",
+    "manufacturer": "Colt",
+    "capacity": ["8"]
+  },
+  {
+    "_id": "Ellie, Joel, Abby",
+    "type": "Revolver",
+    "model": "66",
+    "caliber": "45",
+    "weight": "1.56 lbs (0.71 kg)",
+    "manufacturer": "Taurus",
+    "capacity": ["6"]
+  },
+  {
+    "_id": "Abby",
+    "type": "Break-action pistol",
+    "model": "Contender",
+    "caliber": "Various",
+    "weight": "Unknown",
+    "manufacturer": "Thompson/Center",
+    "capacity": ["1"]
+  },
+
+  {
+    "_id": "Ellie",
+    "type": "Submachine Gun (MPX)",
+    "model": "MPX",
+    "caliber": "9x19mm",
+    "weight": "5.7 lbs (2.6 kg) - 6 lbs (2.7 kg)",
+    "manufacturer": "SIG Sauer",
+    "capacity": ["20"]
+  },
+
+  {
+    "_id": "Abby",
+    "type": "Shotgun",
+    "model": "MP-27EM-1C",
+    "caliber": "12/76",
+    "weight": "7,4 lbs (3,4 kg)",
+    "manufacturer": "Baikal",
+    "capacity": ["2"]
+  },
+  {
+    "_id": "Ellie",
+    "type": "Shotgun",
+    "model": "870",
+    "caliber": "12/76",
+    "weight": "7,4 lbs (3,4 kg)",
+    "manufacturer": "Remington",
+    "capacity": ["3", "5", "8"]
+  },
+  {
+    "_id": "Jessie",
+    "type": "Rifle",
+    "model": "336",
+    "caliber": ".30-30 Winchester",
+    "weight": "3,18 kg",
+    "manufacturer": "Marlin Firearms",
+    "capacity": ["Variable"]
+  },
+  {
+    "_id": "Abby",
+    "type": "Rifle",
+    "model": "308",
+    "caliber": ".308 Win",
+    "weight": "9.5 lbs (4.3 kg)",
+    "manufacturer": "Molot Oruzhie",
+    "capacity": ["3", "5", "7", "10", "30"]
+  },
+  {
+    "_id": "Ellie",
+    "type": "Sniper Rifle",
+    "model": "700",
+    "caliber": "Varies depending on model",
+    "weight": "Varies depending on model",
+    "manufacturer": "Remington",
+    "capacity": ["3", "4", "5", "6"]
+  },
+  {
+    "_id": "Tommy",
+    "type": "Rifle",
+    "model": "M1A",
+    "caliber": ".308 Win",
+    "weight": "9.3 lbs (4.2 kg)",
+    "manufacturer": "Springfield Armory",
+    "capacity": ["10", "20"]
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Ellie Williams",
+    "actor_voice": {
+      "_id": "661abc123ef4567890abcd01",
+      "name": "Ashley Johnson"
+    },
+    "birthdate": "2019",
+    "ages": [
+      "13 (American Dreams)",
+      "14 (Left Behind, Part I)",
+      "19 (Part II)"
+    ],
+    "other_names": [
+      "Kiddo (by Joel)",
+      "Baby girl (by Joel)",
+      "Little Rabbit (by David)",
+      "New Kid (by Riley)",
+      "Brick Master (by herself)",
+      "Herding Master (by herself)",
+      "El (by Dina)",
+      "Babe (by Dina)"
+    ],
+    "gender": "Female",
+    "status": "Alive",
+    "occupations": ["Military school cadet (formerly)", "Jackson patrolman"],
+    "affiliations": [
+      {
+        "_id": "661abc123ef4567890abcd22",
+        "name": "FEDRA",
+        "description": "preparatory school, formerly"
+      },
+      {
+        "_id": "661abc123ef4567890abcd23",
+        "name": "Fireflies",
+        "description": "informally; formerly"
+      },
+      {
+        "_id": "661abc123ef4567890abcd22",
+        "name": "Riley Abel",
+        "description": "formerly"
+      },
+      {
+        "_id": "661abc123ef4567890abcd23",
+        "name": "Jackson community",
+        "description": "currently"
+      }
+    ],
+    "relationships": [
+      { "name": "Anna", "type": "mother" },
+      { "name": "Cat", "type": "ex-girlfriend" },
+      { "name": "Dina", "type": "ex-girlfriend" },
+      { "name": "JJ", "type": "adopted son" },
+      { "name": "Joel Miller", "type": "surrogate father" }
+    ],
+    "resides": [
+      {
+        "_id": "661abc123ef4567890abcd01",
+        "name": "Boston QZ",
+        "city": "Boston",
+        "decription": "formerly"
+      },
+      {
+        "_id": "661abc123ef4567890abcd01",
+        "name": "Jackson community",
+        "city": "Jackson",
+        "decription": "currently"
+      },
+      {
+        "_id": "661abc123ef4567890abcd01",
+        "name": "The Farm",
+        "city": "Unknown",
+        "decription": "formerly"
+      }
+    ],
+    "height": ["5 feet 3 inches (160cm)", "5 feet 5 inches (165cm)"],
+    "hair_color": "Auburn",
+    "eye_color": "Green",
+    "weapons": [
+      {
+        "_id": "661abc123ef4567890abcd22",
+        "name": "Switchblade"
+      },
+      {
+        "_id": "661abc123ef4567890abcd23",
+        "name": "Bow and Arrow"
+      }
+    ],
+    "collectibles": [
+      {
+        "_id": "661abc123ef4567890abcd33",
+        "name": "Trading Card - The Starfire Kids"
+      }
+    ],
+    "appears": [
+      "The Last of Us: American Dreams",
+      "The Last of Us Part I",
+      "The Last of Us: Left Behind",
+      "The Last of Us: One Night Live",
+      "The Last of Us Part II"
+    ]
+  }
+]

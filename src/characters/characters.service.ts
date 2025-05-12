@@ -10,7 +10,7 @@ import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
 
 @Injectable()
-export class CharacterService {
+export class CharactersService {
   constructor(
     @InjectModel(Character.name)
     private readonly characterModel: Model<Character>,
@@ -25,8 +25,12 @@ export class CharacterService {
     }
   }
 
-  async findAll(): Promise<Character[]> {
+  async findAll(query?: { name?: string }): Promise<Character[]> {
     try {
+      const filter: any = {};
+      if (query?.name) {
+        filter.name = { $regex: query.name, $options: 'i' }; // insensible a mayúsculas/minúsculas
+      }
       return this.characterModel.find().exec();
     } catch (error) {
       throw new InternalServerErrorException('Error al buscar characters');

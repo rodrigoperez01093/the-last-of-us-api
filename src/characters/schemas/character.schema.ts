@@ -1,57 +1,105 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+// character.schema.ts
+
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+export type CharacterDocument = Character & Document;
+
 @Schema({ timestamps: { createdAt: 'created_at' } })
-export class Character extends Document {
+export class Character {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  is_enemy: boolean;
-
   @Prop({
     type: {
-      _id: { type: Types.ObjectId, required: true },
-      name: String,
+      _id: { type: Types.ObjectId, ref: 'Actor', required: true },
+      name: { type: String, required: true },
     },
     required: true,
   })
-  faction: {
+  actor_voice: {
     _id: Types.ObjectId;
     name: string;
   };
 
-  @Prop({
-    type: {
-      _id: { type: Types.ObjectId, required: true },
+  @Prop()
+  birthdate?: string;
+
+  @Prop([String])
+  ages?: string[];
+
+  @Prop([String])
+  other_names?: string[];
+
+  @Prop()
+  gender?: string;
+
+  @Prop()
+  status?: string;
+
+  @Prop([String])
+  occupations?: string[];
+
+  @Prop([String])
+  affiliations?: string[];
+
+  @Prop([
+    {
       name: String,
-      lastname: String,
+      type: String, // relación tipo "father", "friend", etc.
     },
-    required: true,
+  ])
+  relationships?: { name: string; type: string }[];
+
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Location', required: true },
+        name: { type: String, required: true },
+        description: { type: String }, // Solo vive en Character
+      },
+    ],
+    default: [],
   })
-  actor: {
+  resides: {
     _id: Types.ObjectId;
     name: string;
-    lastname: string;
-  };
+    description?: string;
+  }[];
 
-  //   @Prop([
-  //     {
-  //       _id: { type: Types.ObjectId, required: true },
-  //     },
-  //   ])
-  //   weapons: {
-  //     _id: Types.ObjectId;
-  //   }[];
+  @Prop([String])
+  height?: string[];
 
-  //   @Prop([
-  //     {
-  //       _id: { type: Types.ObjectId, required: true },
-  //     },
-  //   ])
-  //   collectibles: {
-  //     _id: Types.ObjectId;
-  //   }[];
+  @Prop()
+  hair_color?: string;
+
+  @Prop()
+  eye_color?: string;
+
+  @Prop([
+    {
+      _id: { type: Types.ObjectId, ref: 'Weapon' },
+      name: String,
+    },
+  ])
+  weapons?: {
+    _id: Types.ObjectId;
+    name: string;
+  }[];
+
+  @Prop([
+    {
+      _id: { type: Types.ObjectId, ref: 'Collectible' },
+      name: String,
+    },
+  ])
+  collectibles?: {
+    _id: Types.ObjectId;
+    name: string;
+  }[];
+
+  @Prop([String])
+  appears?: string[];
 }
 
 export const CharacterSchema = SchemaFactory.createForClass(Character);

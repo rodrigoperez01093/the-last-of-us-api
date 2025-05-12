@@ -1,58 +1,121 @@
-import {
-  IsString,
-  IsBoolean,
-  IsArray,
-  ValidateNested,
-  IsMongoId,
-} from 'class-validator';
+// dto/create-character.dto.ts
+
+import { IsString, IsOptional, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class ActorDto {
-  @IsMongoId()
-  _id: string;
-
+class ActorVoiceDto {
   @IsString()
-  name: string;
-
-  @IsString()
-  lastname: string;
-}
-
-class FactionDto {
-  @IsMongoId()
   _id: string;
 
   @IsString()
   name: string;
 }
 
-class ReferenceDto {
-  @IsMongoId()
+class RelationshipDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  type: string;
+}
+
+class LocationsDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  city: string;
+
+  @IsString()
+  state: string;
+}
+
+class WeaponOrCollectibleDto {
+  @IsString()
   _id: string;
+
+  @IsString()
+  name: string;
 }
 
 export class CreateCharacterDto {
   @IsString()
   name: string;
 
-  @IsBoolean()
-  is_enemy: boolean;
-
   @ValidateNested()
-  @Type(() => ActorDto)
-  actor: ActorDto;
+  @Type(() => ActorVoiceDto)
+  actor_voice: ActorVoiceDto;
 
-  @ValidateNested()
-  @Type(() => FactionDto)
-  faction: FactionDto;
+  @IsOptional()
+  @IsString()
+  birthdate?: string;
 
-  //   @IsArray()
-  //   @ValidateNested({ each: true })
-  //   @Type(() => ReferenceDto)
-  //   weapons: ReferenceDto[];
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  ages?: string[];
 
-  //   @IsArray()
-  //   @ValidateNested({ each: true })
-  //   @Type(() => ReferenceDto)
-  //   collectibles: ReferenceDto[];
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  other_names?: string[];
+
+  @IsOptional()
+  @IsString()
+  gender?: string;
+
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  occupations?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  affiliations?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RelationshipDto)
+  relationships?: RelationshipDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  resides?: LocationsDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  height?: string[];
+
+  @IsOptional()
+  @IsString()
+  hair_color?: string;
+
+  @IsOptional()
+  @IsString()
+  eye_color?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => WeaponOrCollectibleDto)
+  weapons?: WeaponOrCollectibleDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => WeaponOrCollectibleDto)
+  collectibles?: WeaponOrCollectibleDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  appears?: string[];
 }
