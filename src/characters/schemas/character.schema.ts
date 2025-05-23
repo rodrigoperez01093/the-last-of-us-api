@@ -2,6 +2,7 @@
 
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Relationship } from './relationship.schema';
 
 export type CharacterDocument = Character & Document;
 
@@ -43,13 +44,8 @@ export class Character {
   @Prop([String])
   affiliations?: string[];
 
-  @Prop([
-    {
-      name: String,
-      type: String, // relación tipo "father", "friend", etc.
-    },
-  ])
-  relationships?: { name: string; type: string }[];
+  @Prop({ type: [Relationship], default: [] })
+  relationships?: Relationship[];
 
   @Prop({
     type: [

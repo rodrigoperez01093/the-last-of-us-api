@@ -7,10 +7,13 @@ export class ActorsController {
   constructor(private readonly actorsService: ActorsService) {}
 
   // TODO: generar data de actores, luego algunos characters y hacer join, con este fluijo ok puedo i cargando otras tablas para luego conectarlas
-
   @Post()
-  create(@Body() createActorDto: CreateActorDto) {
-    return this.actorsService.create(createActorDto);
+  createOrUpdate(@Body() body: CreateActorDto & { _id?: string }) {
+    if (body._id) {
+      const { _id, ...rest } = body;
+      return this.actorsService.update(_id, rest);
+    }
+    return this.actorsService.create(body);
   }
 
   @Get()

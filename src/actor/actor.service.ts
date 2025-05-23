@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Actor } from './schemas/actor.schema';
 import { CreateActorDto } from './dto/create-actor.dto';
+import { UpdateActorDto } from './dto/update-actor.dto';
 
 @Injectable()
 export class ActorsService {
@@ -44,5 +45,14 @@ export class ActorsService {
       }
       throw new InternalServerErrorException('Error al buscar actor');
     }
+  }
+
+  async update(
+    id: string,
+    updateActorDto: UpdateActorDto,
+  ): Promise<Actor | null> {
+    return this.actorModel
+      .findByIdAndUpdate(id, updateActorDto, { new: true })
+      .exec();
   }
 }
