@@ -7,6 +7,7 @@ import { ActorModule } from './actor/actor.module';
 import { LocationsModule } from './locations/locations.module';
 import { WeaponsModule } from './weapons/weapons.module';
 import { CollectiblesModule } from './collectibles/collectibles.module';
+import { ChaptersModule } from './chapters/chapters.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CollectiblesModule } from './collectibles/collectibles.module';
     LocationsModule,
     WeaponsModule,
     CollectiblesModule,
+    ChaptersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

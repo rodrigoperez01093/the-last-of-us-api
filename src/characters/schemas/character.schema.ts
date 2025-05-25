@@ -52,6 +52,7 @@ export class Character {
       {
         _id: { type: Types.ObjectId, ref: 'Location', required: true },
         name: { type: String, required: true },
+        city: { type: String, required: true },
         description: { type: String }, // Solo vive en Character
       },
     ],
@@ -60,6 +61,7 @@ export class Character {
   resides: {
     _id: Types.ObjectId;
     name: string;
+    city: string;
     description?: string;
   }[];
 
