@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ChaptersService } from './chapters.service';
 import { CreateChapterDto } from './dto/create-chapter.dto';
 import { UpdateChapterDto } from './dto/update-chapter.dto';
+import { FilterChaptersDto } from './dto/filter-chapters.dto';
 
 @Controller('chapters')
 export class ChaptersController {
@@ -25,8 +27,8 @@ export class ChaptersController {
   }
 
   @Get()
-  findAll() {
-    return this.chaptersService.findAll();
+  findAll(@Query() query: FilterChaptersDto) {
+    return this.chaptersService.findAll(query);
   }
 
   @Get(':id')

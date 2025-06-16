@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { ObjectId } from 'mongoose';
+import { FilterLocationsDto } from './dto/filter-locations.dto';
 
 @Controller('locations')
 export class LocationsController {
@@ -17,8 +26,8 @@ export class LocationsController {
   }
 
   @Get()
-  findAll() {
-    return this.locationsService.findAll();
+  findAll(@Query() query: FilterLocationsDto) {
+    return this.locationsService.findAll(query);
   }
 
   @Get(':id')

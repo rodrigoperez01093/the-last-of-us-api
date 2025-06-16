@@ -9,7 +9,12 @@ export interface QueryBuildOptions {
     | 'regex'
     | 'mongoIdInArray'
     | {
-        type: 'string' | 'mongoId' | 'regex' | 'mongoIdInArray';
+        type:
+          | 'string'
+          | 'mongoId'
+          | 'regex'
+          | 'mongoIdInArray'
+          | 'stringInArray';
         path?: string; // para cambiar el path final usado en el filtro
       }
   >;
@@ -60,6 +65,9 @@ export function buildQueryAndPagination(
         filter[path || dtoKey] = {
           $elemMatch: { _id: new Types.ObjectId(value) },
         };
+        break;
+      case 'stringInArray':
+        filter[path || dtoKey] = value;
         break;
       default:
         filter[dtoKey] = value;

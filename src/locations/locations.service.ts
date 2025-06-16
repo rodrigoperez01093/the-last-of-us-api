@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Location, LocationDocument } from './schemas/location.schema';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { FilterCharactersDto } from 'src/characters/dto/filter-characters.dto';
+import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
 
 @Injectable()
 export class LocationsService {
@@ -36,8 +42,34 @@ export class LocationsService {
     return updated;
   }
 
-  findAll() {
-    return this.locationModel.find().exec();
+  async findAll(query: FilterCharactersDto) {
+    try {
+      const { filter, pagination } = buildQueryAndPagination(query, {
+        allowedFilters: {
+          appears: { type: 'stringInArray', path: 'appears' },
+        },
+        defaultSortBy: 'createdAt',
+      });
+
+      const [data, total] = await Promise.all([
+        this.locationModel
+          .find(filter)
+          .sort(pagination.sort)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .exec(),
+        this.locationModel.countDocuments(filter),
+      ]);
+
+      return {
+        total,
+        page: pagination.page,
+        limit: pagination.limit,
+        data,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Error al buscar locations');
+    }
   }
 
   findOne(id: ObjectId) {

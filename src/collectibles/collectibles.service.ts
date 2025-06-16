@@ -55,10 +55,10 @@ export class CollectiblesService {
       ]);
 
       return {
-        data,
         total,
         page: pagination.page,
         limit: pagination.limit,
+        data,
       };
     } catch (error) {
       throw new InternalServerErrorException('Error al buscar collectibles');

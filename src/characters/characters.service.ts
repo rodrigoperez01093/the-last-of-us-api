@@ -8,6 +8,8 @@ import { Model } from 'mongoose';
 import { Character } from './schemas/character.schema';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
+import { FilterCharactersDto } from './dto/filter-characters.dto';
+import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
 
 @Injectable()
 export class CharactersService {
@@ -25,13 +27,34 @@ export class CharactersService {
     }
   }
 
-  async findAll(query?: { name?: string }): Promise<Character[]> {
+  async findAll(query: FilterCharactersDto) {
     try {
-      const filter: any = {};
-      if (query?.name) {
-        filter.name = { $regex: query.name, $options: 'i' }; // insensible a mayúsculas/minúsculas
-      }
-      return this.characterModel.find().exec();
+      const { filter, pagination } = buildQueryAndPagination(query, {
+        allowedFilters: {
+          name: 'regex',
+          status: 'string',
+          gender: 'string',
+          appears: { type: 'stringInArray', path: 'appears' },
+        },
+        defaultSortBy: 'createdAt',
+      });
+
+      const [data, total] = await Promise.all([
+        this.characterModel
+          .find(filter)
+          .sort(pagination.sort)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .exec(),
+        this.characterModel.countDocuments(filter),
+      ]);
+
+      return {
+        total,
+        page: pagination.page,
+        limit: pagination.limit,
+        data,
+      };
     } catch (error) {
       throw new InternalServerErrorException('Error al buscar characters');
     }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateWeaponDto } from './dto/create-weapon.dto';
@@ -55,12 +59,14 @@ export class WeaponsService {
       ]);
 
       return {
-        data,
         total,
         page: pagination.page,
         limit: pagination.limit,
+        data,
       };
-    } catch (error) {}
+    } catch (error) {
+      throw new InternalServerErrorException('Error al buscar weapons');
+    }
   }
 
   findOne(id: ObjectId) {
