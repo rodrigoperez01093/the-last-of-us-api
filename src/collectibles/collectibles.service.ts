@@ -8,6 +8,8 @@ import { Model } from 'mongoose';
 import { Collectible } from './schemas/collectibles.schema';
 import { CreateCollectiblesDto } from './dto/create-collectibles.dto';
 import { UpdateCollectiblesDto } from './dto/update-collectibles.dto';
+import { FilterCollectiblesDto } from './dto/filter-collectibles.dto';
+import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
 
 @Injectable()
 export class CollectiblesService {
@@ -29,13 +31,35 @@ export class CollectiblesService {
     }
   }
 
-  async findAll(query?: { name?: string }): Promise<Collectible[]> {
+  async findAll(query: FilterCollectiblesDto) {
     try {
-      const filter: any = {};
-      if (query?.name) {
-        filter.name = { $regex: query.name, $options: 'i' }; // insensible a mayúsculas/minúsculas
-      }
-      return this.collectibleModel.find().exec();
+      const { filter, pagination } = buildQueryAndPagination(query, {
+        allowedFilters: {
+          name: 'regex',
+          type: 'string',
+          'character._id': 'mongoId',
+          'chapter._id': 'mongoId',
+        },
+        allowedSortFields: ['name', 'type', 'number', 'createdAt'],
+        defaultSortBy: 'number',
+      });
+
+      const [data, total] = await Promise.all([
+        this.collectibleModel
+          .find(filter)
+          .sort(pagination.sort)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .exec(),
+        this.collectibleModel.countDocuments(filter),
+      ]);
+
+      return {
+        data,
+        total,
+        page: pagination.page,
+        limit: pagination.limit,
+      };
     } catch (error) {
       throw new InternalServerErrorException('Error al buscar collectibles');
     }

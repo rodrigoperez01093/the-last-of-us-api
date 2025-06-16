@@ -2,6 +2,7 @@
 
 import { Type } from 'class-transformer';
 import {
+  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -17,9 +18,11 @@ export enum CollectibleType {
 
 export enum CharacterType {
   HERO = 'HERO',
+  HEROES = 'HEROES',
   VILLAIN = 'VILLAIN',
   NEUTRAL_VILLAIN = 'NEUTRAL VILLAIN',
   NEUTRAL_HERO = 'NEUTRAL HERO',
+  NEUTRAL = 'NEUTRAL',
 }
 
 class LocationDto {
@@ -30,6 +33,21 @@ class LocationDto {
   walkthrough: string;
 }
 
+class ChapterDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+}
+
+class CharacterDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+}
 export class CreateCollectiblesDto {
   @IsString()
   name: string;
@@ -40,8 +58,9 @@ export class CreateCollectiblesDto {
   @IsString()
   game: string;
 
-  @IsString()
-  chapter: string;
+  @ValidateNested()
+  @Type(() => ChapterDto)
+  chapter: ChapterDto;
 
   @ValidateNested()
   @Type(() => LocationDto)
@@ -49,6 +68,10 @@ export class CreateCollectiblesDto {
 
   @IsNumber()
   number: number;
+
+  @ValidateNested()
+  @Type(() => CharacterDto)
+  character: CharacterDto;
 
   // === Trading card fields ===
   @ValidateIf((o) => o.type === CollectibleType.TRADING_CARD)

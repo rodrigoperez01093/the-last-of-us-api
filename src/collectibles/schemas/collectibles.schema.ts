@@ -19,8 +19,17 @@ export class Collectible {
   @Prop({ required: true })
   game: string;
 
-  @Prop({ required: true })
-  chapter: string;
+  @Prop({
+    type: {
+      _id: { type: Types.ObjectId, ref: 'Chapter', required: true },
+      name: { type: String, required: true },
+    },
+    default: [],
+  })
+  chapter: {
+    _id: Types.ObjectId;
+    name: string;
+  };
 
   @Prop({
     type: {
@@ -37,6 +46,18 @@ export class Collectible {
 
   @Prop({ required: true })
   number: number;
+
+  @Prop({
+    type: {
+      _id: { type: Types.ObjectId, ref: 'Character', required: true },
+      name: { type: String, required: true },
+    },
+    default: [],
+  })
+  character: {
+    _id: Types.ObjectId;
+    name: string;
+  };
 }
 
 export const CollectibleSchema = SchemaFactory.createForClass(Collectible);
@@ -60,7 +81,14 @@ export class TradingCardCollectible {
 
   @Prop({
     required: true,
-    enum: ['HERO', 'VILLAIN', 'NEUTRAL VILLAIN', 'NEUTRAL HERO'],
+    enum: [
+      'HERO',
+      'HEROES',
+      'VILLAIN',
+      'NEUTRAL VILLAIN',
+      'NEUTRAL HERO',
+      'NEUTRAL',
+    ],
   })
   character_type: string;
 }

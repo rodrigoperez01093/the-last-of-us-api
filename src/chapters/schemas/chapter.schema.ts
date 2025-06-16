@@ -2,17 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 export type ChapterDocument = Chapter & Document;
-
-@Schema({ _id: false }) // ← Esto evita el _id
-export class CollectiblesInChapter {
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Collectible' }] })
-  trading_card: Types.ObjectId[];
-}
-
-export const CollectiblesSchemaInChapter = SchemaFactory.createForClass(
-  CollectiblesInChapter,
-);
-
 @Schema({ timestamps: true })
 export class Chapter {
   @Prop({ required: true })
@@ -57,10 +46,16 @@ export class Chapter {
   }[];
 
   @Prop({
-    type: CollectiblesSchemaInChapter,
+    type: Map,
+    of: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Collectible', required: true },
+        name: { type: String, required: true },
+      },
+    ],
     default: {},
   })
-  collectibles: CollectiblesInChapter;
+  collectibles: Map<string, { _id: Types.ObjectId; name: string }[]>;
 }
 
 export const ChapterSchema = SchemaFactory.createForClass(Chapter);

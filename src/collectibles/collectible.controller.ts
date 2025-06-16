@@ -1,6 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CollectiblesService } from './collectibles.service';
 import { CreateCollectiblesDto } from './dto/create-collectibles.dto';
+import { FilterCollectiblesDto } from './dto/filter-collectibles.dto';
 
 @Controller('collectibles')
 export class CollectiblesController {
@@ -16,8 +25,8 @@ export class CollectiblesController {
   }
 
   @Get()
-  findAll() {
-    return this.collectibleService.findAll();
+  findAll(@Query() query: FilterCollectiblesDto) {
+    return this.collectibleService.findAll(query);
   }
 
   @Get(':id')

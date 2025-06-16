@@ -21,7 +21,6 @@ export class ChaptersController {
       const { _id, ...rest } = body;
       return this.chaptersService.update(_id, rest);
     }
-    console.log('BODYYYYYYYYYYY', body);
     return this.chaptersService.create(body);
   }
 

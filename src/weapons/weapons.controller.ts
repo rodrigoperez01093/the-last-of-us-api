@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { WeaponsService } from './weapons.service';
 import { CreateWeaponDto } from './dto/create-weapon.dto';
 import { ObjectId } from 'mongoose';
+import { FilterWeaponsDto } from './dto/filter-weapons.dto';
 
 @Controller('weapons')
 export class WeaponsController {
@@ -17,8 +26,8 @@ export class WeaponsController {
   }
 
   @Get()
-  findAll() {
-    return this.weaponsService.findAll();
+  findAll(@Query() query: FilterWeaponsDto) {
+    return this.weaponsService.findAll(query);
   }
 
   @Get(':id')
