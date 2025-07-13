@@ -2,7 +2,6 @@
 
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Relationship } from './relationship.schema';
 
 export type CharacterDocument = Character & Document;
 
@@ -13,46 +12,73 @@ export class Character {
 
   @Prop({
     type: {
-      _id: { type: Types.ObjectId, ref: 'Actor', required: true },
-      name: { type: String, required: true },
+      _id: { type: Types.ObjectId, ref: 'Actor', required: false },
+      name: { type: String, required: false },
     },
-    required: true,
+    required: false,
+    default: {},
   })
-  actor_voice: {
-    _id: Types.ObjectId;
-    name: string;
+  actor_voice?: {
+    _id?: Types.ObjectId;
+    name?: string;
   };
 
-  @Prop()
+  @Prop({ default: 'Unknown' })
   birthdate?: string;
 
-  @Prop([String])
+  @Prop({ type: [String], default: [] })
   ages?: string[];
 
-  @Prop([String])
+  @Prop({ type: [String], default: [] })
   other_names?: string[];
 
-  @Prop()
+  @Prop({ default: 'Unknown' })
   gender?: string;
 
-  @Prop()
+  @Prop({ default: 'Unknown' })
   status?: string;
 
-  @Prop([String])
+  @Prop({ type: [String], default: [] })
   occupations?: string[];
 
-  @Prop([String])
-  affiliations?: string[];
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Group', required: true },
+        name: { type: String, required: true },
+        description: { type: String },
+      },
+    ],
+    default: [],
+  })
+  affiliations?: {
+    _id: Types.ObjectId;
+    name: string;
+    description?: string;
+  }[];
 
-  @Prop({ type: [Relationship], default: [] })
-  relationships?: Relationship[];
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Character', required: true },
+        name: { type: String, required: true },
+        type: { type: String, required: true },
+      },
+    ],
+    default: [],
+  })
+  relationships?: {
+    _id: Types.ObjectId;
+    name: string;
+    type: string;
+  }[];
 
   @Prop({
     type: [
       {
         _id: { type: Types.ObjectId, ref: 'Location', required: true },
         name: { type: String, required: true },
-        city: { type: String, required: true },
+        state: { type: String, required: true },
         description: { type: String }, // Solo vive en Character
       },
     ],
@@ -61,42 +87,51 @@ export class Character {
   resides: {
     _id: Types.ObjectId;
     name: string;
-    city: string;
+    state: string;
     description?: string;
   }[];
 
-  @Prop([String])
+  @Prop({
+    type: [String],
+    default: [],
+  })
   height?: string[];
 
-  @Prop()
+  @Prop({ default: 'Unknown' })
   hair_color?: string;
 
-  @Prop()
+  @Prop({ default: 'Unknown' })
   eye_color?: string;
 
-  @Prop([
-    {
-      _id: { type: Types.ObjectId, ref: 'Weapon' },
-      name: String,
-    },
-  ])
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Weapon' },
+        type: { type: String, required: true },
+        model: { type: String, required: true },
+      },
+    ],
+    default: [],
+  })
   weapons?: {
     _id: Types.ObjectId;
-    name: string;
+    type: string;
+    model: string;
   }[];
 
-  @Prop([
-    {
-      _id: { type: Types.ObjectId, ref: 'Collectible' },
-      name: String,
-    },
-  ])
-  collectibles?: {
-    _id: Types.ObjectId;
-    name: string;
-  }[];
+  @Prop({
+    type: Map,
+    of: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Collectible', required: true },
+        name: { type: String, required: true },
+      },
+    ],
+    default: {},
+  })
+  collectibles?: Map<string, { _id: Types.ObjectId; name: string }[]>;
 
-  @Prop([String])
+  @Prop({ type: [String], default: [] })
   appears?: string[];
 }
 
