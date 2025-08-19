@@ -14,7 +14,8 @@ export interface QueryBuildOptions {
           | 'mongoId'
           | 'regex'
           | 'mongoIdInArray'
-          | 'stringInArray';
+          | 'stringInArray'
+          | 'nestedArrayRegex';
         path?: string; // para cambiar el path final usado en el filtro
       }
   >;
@@ -68,6 +69,11 @@ export function buildQueryAndPagination(
         break;
       case 'stringInArray':
         filter[path || dtoKey] = value;
+        break;
+      case 'nestedArrayRegex':
+        filter[path || dtoKey] = {
+          $elemMatch: { name: { $regex: value, $options: 'i' } },
+        };
         break;
       default:
         filter[dtoKey] = value;

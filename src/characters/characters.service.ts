@@ -4,18 +4,22 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Character } from './schemas/character.schema';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
 import { FilterCharactersDto } from './dto/filter-characters.dto';
 import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
+import { Group } from 'src/groups/schemas/group.schema';
 
 @Injectable()
 export class CharactersService {
   constructor(
     @InjectModel(Character.name)
     private readonly characterModel: Model<Character>,
+
+    @InjectModel(Group.name)
+    private readonly groupModel: Model<Group>,
   ) {}
 
   async create(createCharacterDto: CreateCharacterDto): Promise<Character> {
@@ -38,6 +42,49 @@ export class CharactersService {
         },
         defaultSortBy: 'createdAt',
       });
+
+      // filter by groupId
+      if (query.affiliationGroup) {
+        const group = await this.groupModel.findById(query.affiliationGroup, {
+          'members.characters._id': 1,
+          'leaders.characters._id': 1,
+        });
+
+        if (!group) {
+          return {
+            total: 0,
+            page: pagination.page,
+            limit: pagination.limit,
+            data: [],
+          };
+        }
+
+        const memberIds = group.members.characters.map((c) => c._id);
+        const leaderIds = group.leaders.characters.map((c) => c._id);
+        const allIds = [...new Set([...memberIds, ...leaderIds])];
+
+        const finalFilter = {
+          ...filter,
+          _id: { $in: allIds },
+        };
+
+        const [data, total] = await Promise.all([
+          this.characterModel
+            .find(finalFilter)
+            .sort(pagination.sort)
+            .skip(pagination.skip)
+            .limit(pagination.limit)
+            .exec(),
+          this.characterModel.countDocuments(finalFilter),
+        ]);
+
+        return {
+          total,
+          page: pagination.page,
+          limit: pagination.limit,
+          data,
+        };
+      }
 
       const [data, total] = await Promise.all([
         this.characterModel
@@ -73,6 +120,10 @@ export class CharactersService {
       }
       throw new InternalServerErrorException('Error al buscar character');
     }
+  }
+
+  async findAllNames() {
+    return this.characterModel.find().select('_id name').exec();
   }
 
   async update(

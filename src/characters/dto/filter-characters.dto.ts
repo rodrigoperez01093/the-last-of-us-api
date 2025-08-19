@@ -1,7 +1,14 @@
 // src/collectibles/dto/filter-collectibles.dto.ts
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsIn, IsNumberString, IsOptional, IsString } from 'class-validator';
+import {
+  IsIn,
+  IsMongoId,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import gameTitles from '../../common/Resources/gameTitles.json';
 
 export class FilterCharactersDto {
   @ApiPropertyOptional({ description: 'Partial match for name' })
@@ -24,22 +31,19 @@ export class FilterCharactersDto {
   gender?: string;
 
   @ApiPropertyOptional({
-    enum: [
-      'The Last of Us: American Dreams',
-      'The Last of Us Part I',
-      'The Last of Us: Left Behind',
-      'The Last of Us: One Night Live',
-      'The Last of Us Part II',
-    ],
+    description:
+      'Group ID where the characters belongs (use values from /groups/enums)',
+    example: '65c4b7a36a2a4d001f0d5f9a',
   })
   @IsOptional()
-  @IsIn([
-    'The Last of Us: American Dreams',
-    'The Last of Us Part I',
-    'The Last of Us: Left Behind',
-    'The Last of Us: One Night Live',
-    'The Last of Us Part II',
-  ])
+  @IsMongoId()
+  affiliationGroup?: string;
+
+  @ApiPropertyOptional({
+    enum: gameTitles,
+  })
+  @IsOptional()
+  @IsIn(gameTitles)
   appears?: string;
 
   @ApiPropertyOptional({ description: 'Page number', example: '1' })

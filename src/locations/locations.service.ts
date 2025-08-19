@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { Location, LocationDocument } from './schemas/location.schema';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
-import { FilterCharactersDto } from 'src/characters/dto/filter-characters.dto';
 import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
+import { FilterLocationsDto } from './dto/filter-locations.dto';
 
 @Injectable()
 export class LocationsService {
@@ -42,15 +42,69 @@ export class LocationsService {
     return updated;
   }
 
-  async findAll(query: FilterCharactersDto) {
+  async findAll(query: FilterLocationsDto) {
     try {
       const { filter, pagination } = buildQueryAndPagination(query, {
         allowedFilters: {
           appears: { type: 'stringInArray', path: 'appears' },
+          state: { type: 'string', path: 'state' },
         },
         defaultSortBy: 'createdAt',
       });
 
+      // filter by chapterId
+      if (query.chapterId) {
+        const pipeline: any[] = [
+          {
+            $lookup: {
+              from: 'chapters',
+              localField: '_id',
+              foreignField: 'locations._id',
+              as: 'chapters',
+            },
+          },
+          {
+            $match: {
+              'chapters._id': new Types.ObjectId(query.chapterId),
+              ...filter,
+            },
+          },
+          {
+            $project: {
+              chapters: 0, // no incluimos el array de chapters en el resultado
+            },
+          },
+          { $sort: pagination.sort },
+          { $skip: pagination.skip },
+          { $limit: pagination.limit },
+        ];
+        const data = await this.locationModel.aggregate(pipeline);
+
+        const total = await this.locationModel.aggregate([
+          {
+            $lookup: {
+              from: 'chapters',
+              localField: '_id',
+              foreignField: 'locations._id',
+              as: 'chapters',
+            },
+          },
+          {
+            $match: {
+              'chapters._id': new Types.ObjectId(query.chapterId),
+              ...filter,
+            },
+          },
+          { $count: 'total' },
+        ]);
+
+        return {
+          total: total[0]?.total ?? 0,
+          page: pagination.page,
+          limit: pagination.limit,
+          data,
+        };
+      }
       const [data, total] = await Promise.all([
         this.locationModel
           .find(filter)

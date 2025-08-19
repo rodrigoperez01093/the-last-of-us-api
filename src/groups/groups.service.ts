@@ -29,6 +29,10 @@ export class GroupsService {
     return `This action returns a #${id} group`;
   }
 
+  async findAllNames() {
+    return this.groupModel.find().select('_id name').exec();
+  }
+
   async update(
     id: string,
     updateGroupDto: UpdateGroupDto,

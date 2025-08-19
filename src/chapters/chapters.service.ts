@@ -65,6 +65,10 @@ export class ChaptersService {
     return chapter;
   }
 
+  async findAllNames() {
+    return this.chapterModel.find().select('_id name').exec();
+  }
+
   async update(id: string, updateDto: UpdateChapterDto): Promise<Chapter> {
     const updated = await this.chapterModel.findByIdAndUpdate(id, updateDto, {
       new: true,

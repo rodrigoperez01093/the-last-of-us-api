@@ -10,6 +10,8 @@ import {
 import { CharactersService } from './characters.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { FilterCharactersDto } from './dto/filter-characters.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { CharacterEnumDto } from './dto/character-enum.dto';
 
 @Controller('character')
 export class CharacterController {
@@ -27,6 +29,17 @@ export class CharacterController {
   @Get()
   findAll(@Query() query: FilterCharactersDto) {
     return this.charactersService.findAll(query);
+  }
+
+  @Get('enums')
+  @ApiOkResponse({
+    type: CharacterEnumDto,
+    isArray: true,
+    description: 'List of characters',
+  })
+  async getCharactersEnum() {
+    const characters = await this.charactersService.findAllNames();
+    return characters.map((c: any) => ({ label: c.name, value: c._id }));
   }
 
   @Get(':id')

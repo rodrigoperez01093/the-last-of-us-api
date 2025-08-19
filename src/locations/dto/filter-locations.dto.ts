@@ -1,27 +1,38 @@
 // src/collectibles/dto/filter-collectibles.dto.ts
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsIn, IsNumberString, IsOptional } from 'class-validator';
-
+import {
+  IsIn,
+  IsMongoId,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import gameTitles from '../../common/Resources/gameTitles.json';
+import states from '../../common/Resources/states.json';
 export class FilterLocationsDto {
   @ApiPropertyOptional({
-    enum: [
-      'The Last of Us: American Dreams',
-      'The Last of Us Part I',
-      'The Last of Us: Left Behind',
-      'The Last of Us: One Night Live',
-      'The Last of Us Part II',
-    ],
+    enum: gameTitles,
   })
   @IsOptional()
-  @IsIn([
-    'The Last of Us: American Dreams',
-    'The Last of Us Part I',
-    'The Last of Us: Left Behind',
-    'The Last of Us: One Night Live',
-    'The Last of Us Part II',
-  ])
+  @IsIn(gameTitles)
   appears?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Chapter ID where the location appears (use values from /chapters/enums)',
+    example: '65c4b7a36a2a4d001f0d5f9a',
+  })
+  @IsOptional()
+  @IsMongoId()
+  chapterId?: string;
+
+  @ApiPropertyOptional({
+    enum: states,
+  })
+  @IsOptional()
+  @IsIn(states)
+  state?: string;
 
   @ApiPropertyOptional({ description: 'Page number', example: '1' })
   @IsOptional()

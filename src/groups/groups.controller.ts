@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { GroupEnumDto } from './dto/group-enum.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('groups')
 export class GroupsController {
@@ -18,6 +20,17 @@ export class GroupsController {
   @Get()
   findAll() {
     return this.groupsService.findAll();
+  }
+
+  @Get('enums')
+  @ApiOkResponse({
+    type: GroupEnumDto,
+    isArray: true,
+    description: 'List of groups available',
+  })
+  async getChaptersEnum() {
+    const groups = await this.groupsService.findAllNames();
+    return groups.map((c: any) => ({ label: c.name, value: c._id }));
   }
 
   @Get(':id')
