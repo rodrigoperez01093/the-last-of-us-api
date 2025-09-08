@@ -1,0 +1,12 @@
+[
+  {
+    "name": "The Keene Twins",
+    "type": "trading card",
+    "game": "The Last of Us Part II",
+    "card_number": 2,
+    "chapter": "Jackson",
+    "location": "On a barrel in the Tipsy Bison bar.",
+    "images": ["1", "2"],
+    "content": {}
+  }
+]

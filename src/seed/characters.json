@@ -1,8 +1,34 @@
 [
   {
+    "name": "Federal Disaster Response Agency",
+    "other_names": ["FEDRA", "Military"],
+    "group_type": ["Government agency", "Military dictatorship"],
+    "founded": "Pre-Outbreak",
+    "headquarters": [],
+    "locations": [
+      {
+        "_id": "661abc123ef4567890abcd01",
+        "name": "Boston QZ",
+        "city": "Boston",
+        "decription": "formerly"
+      }
+    ],
+    "leaders": ["mismo caso q headquarters"],
+    "members": ["mismo caso q headquarters, aca es mas facil que se de el mix"],
+    "allies": [{}],
+    "enemies": [{}],
+    "appears": [
+      "The Last of Us: American Dreams",
+      "The Last of Us Part I",
+      "The Last of Us: Left Behind",
+      "The Last of Us: One Night Live",
+      "The Last of Us Part II"
+    ]
+  },
+  {
     "name": "Ellie Williams",
     "actor_voice": {
-      "_id": "661abc123ef4567890abcd01",
+      "_id": "6802d0d15ec58c59660311b3",
       "name": "Ashley Johnson"
     },
     "birthdate": "2019",

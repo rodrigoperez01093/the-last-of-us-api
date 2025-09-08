@@ -1,6 +1,17 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CharactersService } from './characters.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
+import { FilterCharactersDto } from './dto/filter-characters.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { CharacterEnumDto } from './dto/character-enum.dto';
 
 @Controller('character')
 export class CharacterController {
@@ -16,8 +27,19 @@ export class CharacterController {
   }
 
   @Get()
-  findAll() {
-    return this.charactersService.findAll();
+  findAll(@Query() query: FilterCharactersDto) {
+    return this.charactersService.findAll(query);
+  }
+  // TODO: check fedra members
+  @Get('enums')
+  @ApiOkResponse({
+    type: CharacterEnumDto,
+    isArray: true,
+    description: 'List of characters',
+  })
+  async getCharactersEnum() {
+    const characters = await this.charactersService.findAllNames();
+    return characters.map((c: any) => ({ label: c.name, value: c._id }));
   }
 
   @Get(':id')

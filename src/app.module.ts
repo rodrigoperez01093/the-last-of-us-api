@@ -6,6 +6,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ActorModule } from './actor/actor.module';
 import { LocationsModule } from './locations/locations.module';
 import { WeaponsModule } from './weapons/weapons.module';
+import { CollectiblesModule } from './collectibles/collectibles.module';
+import { ChaptersModule } from './chapters/chapters.module';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -14,6 +17,9 @@ import { WeaponsModule } from './weapons/weapons.module';
     ActorModule,
     LocationsModule,
     WeaponsModule,
+    CollectiblesModule,
+    ChaptersModule,
+    GroupsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

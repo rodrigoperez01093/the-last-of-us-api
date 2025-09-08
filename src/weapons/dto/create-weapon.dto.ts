@@ -1,5 +1,19 @@
-import { IsOptional, IsString, IsArray, IsMongoId } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsOptional,
+  IsString,
+  IsArray,
+  IsMongoId,
+  ValidateNested,
+} from 'class-validator';
 
+class CharacterDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+}
 export class CreateWeaponDto {
   @IsMongoId()
   _id: string;
@@ -22,6 +36,11 @@ export class CreateWeaponDto {
   @IsArray()
   @IsString({ each: true })
   capacity: string[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CharacterDto)
+  character: CharacterDto[];
 
   @IsOptional()
   @IsString()

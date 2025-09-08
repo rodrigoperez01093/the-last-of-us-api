@@ -20,6 +20,20 @@ export class Weapon {
 
   @Prop({ type: [String], required: false })
   capacity?: string[];
+
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Character', required: true },
+        name: { type: String, required: true },
+      },
+    ],
+    default: [],
+  })
+  character: {
+    _id: Types.ObjectId;
+    name: string;
+  }[];
 }
 
 export type WeaponDocument = Weapon & Document;
