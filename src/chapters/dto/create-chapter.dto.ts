@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsMongoId,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 class LocationsDto {
   @IsMongoId()
@@ -15,10 +21,26 @@ class LocationsDto {
   state: string;
 }
 
+class CollectiblesItemDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+}
+
 class CollectiblesDto {
+  @IsOptional()
   @IsArray()
-  @IsMongoId({ each: true })
-  trading_card: string[];
+  @ValidateNested({ each: true })
+  @Type(() => CollectiblesItemDto)
+  trading_card?: CollectiblesItemDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CollectiblesItemDto)
+  coin?: CollectiblesItemDto[];
 }
 
 class CharacterSummaryDto {

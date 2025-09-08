@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateWeaponDto } from './dto/create-weapon.dto';
 import { UpdateWeaponDto } from './dto/update-weapon.dto';
 import { Weapon, WeaponDocument } from './schemas/weapon.schema';
+import { FilterWeaponsDto } from './dto/filter-weapons.dto';
+import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
 
 @Injectable()
 export class WeaponsService {
@@ -33,8 +39,34 @@ export class WeaponsService {
     return updated;
   }
 
-  findAll() {
-    return this.weaponModel.find().exec();
+  async findAll(query: FilterWeaponsDto) {
+    try {
+      const { filter, pagination } = buildQueryAndPagination(query, {
+        allowedFilters: {
+          character: { type: 'mongoIdInArray', path: 'character' },
+        },
+        defaultSortBy: 'createdAt',
+      });
+
+      const [data, total] = await Promise.all([
+        this.weaponModel
+          .find(filter)
+          .sort(pagination.sort)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .exec(),
+        this.weaponModel.countDocuments(filter),
+      ]);
+
+      return {
+        total,
+        page: pagination.page,
+        limit: pagination.limit,
+        data,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Error al buscar weapons');
+    }
   }
 
   findOne(id: ObjectId) {

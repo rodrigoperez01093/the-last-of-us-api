@@ -1,10 +1,16 @@
 // dto/create-character.dto.ts
 
-import { IsString, IsOptional, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsMongoId,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ActorVoiceDto {
-  @IsString()
+  @IsMongoId()
   _id: string;
 
   @IsString()
@@ -12,6 +18,9 @@ class ActorVoiceDto {
 }
 
 class RelationshipDto {
+  @IsMongoId()
+  _id: string;
+
   @IsString()
   name: string;
 
@@ -19,20 +28,64 @@ class RelationshipDto {
   type: string;
 }
 
-class LocationsDto {
-  @IsString()
-  name: string;
-
-  @IsString()
-  city: string;
-}
-
-class WeaponOrCollectibleDto {
-  @IsString()
+class AffiliationsDto {
+  @IsMongoId()
   _id: string;
 
   @IsString()
   name: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+class LocationsDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  state: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+class WeaponOrCollectibleDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  type: string;
+
+  @IsString()
+  model: string;
+}
+
+class CollectiblesItemDto {
+  @IsMongoId()
+  _id: string;
+
+  @IsString()
+  name: string;
+}
+
+class CollectiblesDto {
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CollectiblesItemDto)
+  trading_card?: CollectiblesItemDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CollectiblesItemDto)
+  coin?: CollectiblesItemDto[];
 }
 
 export class CreateCharacterDto {
@@ -72,8 +125,9 @@ export class CreateCharacterDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  affiliations?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => AffiliationsDto)
+  affiliations?: AffiliationsDto[];
 
   @IsOptional()
   @IsArray()
@@ -83,7 +137,8 @@ export class CreateCharacterDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => LocationsDto)
   resides?: LocationsDto[];
 
   @IsOptional()
@@ -106,10 +161,9 @@ export class CreateCharacterDto {
   weapons?: WeaponOrCollectibleDto[];
 
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => WeaponOrCollectibleDto)
-  collectibles?: WeaponOrCollectibleDto[];
+  @Type(() => CollectiblesDto)
+  collectibles?: CollectiblesDto;
 
   @IsOptional()
   @IsArray()

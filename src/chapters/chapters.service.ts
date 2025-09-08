@@ -8,6 +8,8 @@ import { UpdateChapterDto } from './dto/update-chapter.dto';
 import { Chapter, ChapterDocument } from './schemas/chapter.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { FilterChaptersDto } from './dto/filter-chapters.dto';
+import { buildQueryAndPagination } from 'src/common/helpers/query-builder';
 
 @Injectable()
 export class ChaptersService {
@@ -25,8 +27,32 @@ export class ChaptersService {
     }
   }
 
-  async findAll(): Promise<Chapter[]> {
-    return this.chapterModel.find().exec();
+  async findAll(query: FilterChaptersDto) {
+    try {
+      const { filter, pagination } = buildQueryAndPagination(query, {
+        allowedFilters: {
+          game: 'string',
+        },
+        defaultSortBy: 'createdAt',
+      });
+      const [data, total] = await Promise.all([
+        this.chapterModel
+          .find(filter)
+          .sort(pagination.sort)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .exec(),
+        this.chapterModel.countDocuments(filter),
+      ]);
+      return {
+        total,
+        page: pagination.page,
+        limit: pagination.limit,
+        data,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Error al buscar chapters');
+    }
   }
 
   async findOne(id: string): Promise<Chapter> {
@@ -37,6 +63,10 @@ export class ChaptersService {
       );
     }
     return chapter;
+  }
+
+  async findAllNames() {
+    return this.chapterModel.find().select('_id name').exec();
   }
 
   async update(id: string, updateDto: UpdateChapterDto): Promise<Chapter> {
