@@ -41,7 +41,7 @@ export class LocationsService {
 
     return updated;
   }
-
+  // Todo chequear esta partew
   async findAll(query: FilterLocationsDto) {
     try {
       const { filter, pagination } = buildQueryAndPagination(query, {

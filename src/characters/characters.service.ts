@@ -30,7 +30,7 @@ export class CharactersService {
       throw new InternalServerErrorException('No se pudo crear el character');
     }
   }
-
+  // Todo chequear esta partew
   async findAll(query: FilterCharactersDto) {
     try {
       const { filter, pagination } = buildQueryAndPagination(query, {
@@ -127,7 +127,7 @@ export class CharactersService {
   }
 
   async update(
-    id: string,
+    id: string, // Todo chequear esta partew
     updateCharacterDto: UpdateCharacterDto,
   ): Promise<Character | null> {
     return this.characterModel

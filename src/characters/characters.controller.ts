@@ -30,7 +30,7 @@ export class CharacterController {
   findAll(@Query() query: FilterCharactersDto) {
     return this.charactersService.findAll(query);
   }
-
+  // TODO: check fedra members
   @Get('enums')
   @ApiOkResponse({
     type: CharacterEnumDto,
